@@ -3,7 +3,7 @@ name: Docker Build & Push
 on:
   push:
     branches:
-      - ghaction
+      - main
     tags:
       - '*'
 
@@ -32,7 +32,7 @@ jobs:
         run: |
           IMAGE=${{ vars.DOCKER_USERNAME }}/$(basename ${{ github.repository }})
 
-          if [[ "${GITHUB_REF}" == "refs/heads/ghaction" ]]; then
+          if [[ "${GITHUB_REF}" == "refs/heads/main" ]]; then
             echo "tags=${IMAGE}:main,${IMAGE}:latest" >> $GITHUB_OUTPUT
           elif [[ "${GITHUB_REF}" == refs/tags/* ]]; then
             TAG=${GITHUB_REF#refs/tags/}
