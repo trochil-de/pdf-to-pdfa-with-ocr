@@ -11,7 +11,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    environment: docker.io
+    environment: docker-io
 
     steps:
       - name: Checkout
