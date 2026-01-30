@@ -3,7 +3,9 @@ FROM alpine:3
 RUN apk add --no-cache \
 	bash \
 	tesseract-ocr \
+    tesseract-ocr-data-osd \
 	tesseract-ocr-data-deu \
+	tesseract-ocr-data-eng \
 	ocrmypdf \
 	&& rm -rf /var/cache/apk/*
 
