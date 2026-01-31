@@ -33,6 +33,7 @@ process_pdf() {
 		
 	if ! ( set -C; > "$lock_file" ) 2> /dev/null; then
 		echo "⏳ $base_filename_with_type is being processed by another instance"
+		return
 	fi
 	
     # OCR ausführen, Fehler nicht das Skript stoppen lassen
