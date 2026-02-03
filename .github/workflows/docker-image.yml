@@ -5,7 +5,7 @@ on:
     branches:
       - main
     tags:
-      - '*'
+      - 'v-[0-9]*-[0-9]*-[0-9]*'
 
 jobs:
   build:
@@ -35,8 +35,21 @@ jobs:
           if [[ "${GITHUB_REF}" == "refs/heads/main" ]]; then
             echo "tags=${IMAGE}:main,${IMAGE}:latest" >> $GITHUB_OUTPUT
           elif [[ "${GITHUB_REF}" == refs/tags/* ]]; then
-            TAG=${GITHUB_REF#refs/tags/}
-            echo "tags=${IMAGE}:${TAG}" >> $GITHUB_OUTPUT
+            TAG="${GITHUB_REF#refs/tags/}"
+      
+            if [[ ! "$TAG" =~ ^v-[0-9]+-[0-9]+-[0-9]+$ ]]; then
+              echo "Tag format invalid: $TAG"
+              exit 1
+            fi
+      
+            IFS='-' read -r v MAJOR MINOR HOTFIX <<< "$TAG"
+      
+            TAG_HOTFIX="v-${MAJOR}-${MINOR}-${HOTFIX}"
+            TAG_MINOR="v-${MAJOR}-${MINOR}"
+            TAG_MAJOR="v-${MAJOR}"
+      
+            echo "tags=${IMAGE}:${TAG_HOTFIX},${IMAGE}:${TAG_MINOR},${IMAGE}:${TAG_MAJOR}" >> $GITHUB_OUTPUT
+            exit 0
           else
             echo "Unsupported ref: ${GITHUB_REF}"
             exit 1
